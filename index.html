@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Arrival Time Calculator</title>
+		<style>
+			body {
+				font-family: Arial, sans-serif;
+				margin: 50px;
+				background-color: #f0f0f0;
+				color: #333;
+			}
+			h1 {
+				color: #0056b3;
+			}
+			p {
+				font-size: 18px;
+			}
+			label {
+				display: block;
+				margin-top: 10px;
+				font-weight: bold;
+			}
+			input {
+				width: 100%;
+				padding: 10px;
+				margin: 5px 0 10px 0;
+				border: 1px solid #ccc;
+				border-radius: 5px;
+				box-sizing: border-box;
+			}
+			button {
+				background-color: #0056b3;
+				color: white;
+				border: none;
+				padding: 15px 20px;
+				text-align: center;
+				text-decoration: none;
+				display: inline-block;
+				font-size: 16px;
+				margin-top: 10px;
+				border-radius: 5px;
+				cursor: pointer;
+			}
+			button:hover {
+				background-color: #003d80;
+			}
+			#etaResult {
+				margin-top: 20px;
+				font-size: 20px;
+				font-weight: bold;
+			}
+			#loading {
+				display: none;
+				color: #0056b3;
+				font-size: 18px;
+				margin-top: 10px;
+			}
+			.container {
+				background-color: white;
+				padding: 20px;
+				border-radius: 10px;
+				box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<h1>Arrival Time Calculator</h1>
+			<p>Enter the current coordinates:</p>
+			<div>
+				<label for="destinationLatitude">Current Latitude:</label>
+				<input
+					type="text"
+					id="destinationLatitude"
+					placeholder="Enter current latitude"
+				/>
+			</div>
+			<div>
+				<label for="destinationLongitude">Current Longitude:</label>
+				<input
+					type="text"
+					id="destinationLongitude"
+					placeholder="Enter current longitude"
+				/>
+			</div>
+			<button onclick="fetchETA()">Calculate ETA</button>
+			<div id="loading">Calculating ETA...</div>
+			<h2 id="etaResult"></h2>
+		</div>
+
+    <script>
+      async function fetchETA() {
+        const destinationLatitude = document.getElementById('destinationLatitude').value;
+        const destinationLongitude = document.getElementById('destinationLongitude').value;
+  
+        if (!destinationLatitude || !destinationLongitude) {
+          alert('Please enter both destination latitude and longitude.');
+          return;
+        }
+  
+        const response = await fetch(`http://localhost:3000/calculate-eta?destinationLatitude=${destinationLatitude}&destinationLongitude=${destinationLongitude}`);
+        const data = await response.json();
+        document.getElementById('etaResult').innerText = `ETA: ${data.eta.toFixed(2)} minutes`;
+      }
+    </script>
+	</body>
+</html>
